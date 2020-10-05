@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Gradient Generator</title>
+
+  <style> body { margin: 0; } </style>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/color-picker.css">
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <section id="panel">
+
+    <form id="panel-form">
+      <input id="x-input" type="text" value="0">
+      <input id="y-input" type="text" value="0">
+      <input id="width-input" type="text" value="50">
+      <input id="height-input" type="text" value="50">
+      <input id="angle-input" type="text" value="0">
+      <input type="submit">
+    </form>
+
+  </section>
+
+  <div id="color-picker" class="unselectable">
+
+    <div id="color-box">
+      <div id="doughnut"></div>
+    </div>
+    <div id="polychrome">
+      <div class="slider"></div>
+    </div>
+    <div id="transparency">
+      <div class="slider"></div>
+    </div>
+    <div id="color-output"></div>
+
+    <div id="rgba-holder">
+      <p id="rgba-label" class="picker-input-label">RGBA</p>
+      <input id="rgba" class="picker-input" type="text" placeholder="R, G, B, A" value="255, 0, 0, 1">
+    </div>
+    
+    <div id="hex-holder">
+      <p id="hex-label" class="picker-input-label">#HEX</p>
+      <input id="hex" class="picker-input" type="text" placeholder="#HEX" value="FF0000">
+    </div>
+  </div>
+
+  <script src="./library/canvas_gradient_min.js"></script>
+  <script src="./js/color_picker.js"></script>
+  <script src="./js/positioning.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+:root {
+  --base-color: rgba(255, 0, 0, 1);
+  --picker-color: rgba(255, 0, 0, 1);
+  --picker-color-opaque: rgb(255, 0, 0);
+}
+
+.unselectable {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+}
+
+#color-picker {
+  visibility: hidden;
+  position: relative;
+  display: inline-block;
+  margin: 100px;
+  width: auto;
+  height: 370px;
+  padding: 40px 60px 35px 40px;
+
+  background-color: #eeeeee;
+  border-radius: 50px;
+  box-shadow:  40px 40px 80px #d9d9d9, 
+              -40px -40px 80px #ffffff;
+}
+
+#polychrome, #transparency {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+
+  width: 46px;
+  height: 368px;
+
+  border-radius: 5px;
+  box-shadow: 0 0 0 5px #ffffff;
+}
+
+#polychrome {
+  background: linear-gradient(180deg, 
+            rgba(255,0,0,1) 0%, 
+            rgba(255,255,0,1) 17%,
+            rgba(0,255,0,1) 33%, 
+            rgba(0,255,255,1) 50%, 
+            rgba(0,0,255,1) 66%, 
+            rgba(255,0,255,1) 83%, 
+            rgba(255,0,0,1) 100%);
+}
+
+#transparency {
+  background: linear-gradient(180deg,
+              var(--picker-color-opaque),
+            rgba(255,255,255,0)),
+              url("../images/checkered-background.png");
+  background-size: contain;
+}
+
+#color-box {
+  display: inline-block;
+  position: relative;
+
+  height: 368px;
+  width: 368px;
+
+  background: linear-gradient(180deg, #FFFFFF, #000000);
+  border-radius: 5px;
+  box-shadow: 0 0 0 5px #ffffff;
+}
+
+#color-box::after {
+  content: "";
+  position: absolute;
+
+  width: inherit;
+  height: inherit;
+
+  background: linear-gradient(to bottom, var(--base-color), black);
+  -webkit-mask-image: linear-gradient(to left, white, transparent);
+  border-radius: 5px;
+  box-shadow: 0 0 0 5px #ffffff;
+}
+
+#doughnut, .slider {
+  position: absolute;
+  right: -8px;
+  z-index: 1;
+
+  border: 4px solid #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.8);
+
+  pointer-events: none;
+}
+
+#doughnut {
+  top: -8px;
+
+  width: 8px;
+  height: 8px;
+}
+
+.slider {
+  top: -6px;
+
+  width: 54px;
+  height: 4px;
+}
+
+#color-output {
+  position: absolute;
+  display: inline-block;
+  margin-left: 20px;
+
+  width: 150px;
+  height: 100px;
+
+  background: linear-gradient(0deg, var(--picker-color), var(--picker-color)),
+              url('../images/checkered-background.png');
+  border-radius: 10px;
+  box-shadow: 0 0 0 5px #ffffff;
+}
+
+.picker-input {
+  width: 140px;
+  padding: 5px;
+
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.3);
+  box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.3);
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  color: #555555;
+}
+
+.picker-input-label {
+  margin: 0;
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #555555;
+}
+
+#rgba-holder {
+  position: relative;
+  display: inline-block;
+  top: -220px;
+  left: 20px;
+
+  height: 100px;
+}
+
+#rgba-label {
+  display: inline-block;
+  position: absolute;
+}
+
+#rgba {
+  position: relative;
+  display: inline-block;
+  top: 20px;
+}
+
+#hex-holder {
+  position: absolute;
+  display: inline-block;
+  top: 240px;
+  left: 572px;
+
+  height: 100px;
+}
+
+#hex-label {
+  display: inline-block;
+  position: absolute;
+}
+
+#hex {
+  position: relative;
+  display: inline-block;
+  top: 20px;
+}
+
+@media only screen and (max-height: 620px) {
+  #color-picker {
+    height: 260px;
+    padding-right: 46px;
+  }
+  
+  #polychrome, #transparency {
+    height: 256px;
+    width: 32px;
+  }
+
+  #color-box {
+    height: 256px;
+    width: 256px;
+  }
+
+  .slider {
+    width: 40px;
+  }
+
+  #color-output {
+    width: 105px;
+    height: 70px;
+  }
+
+  .picker-input {
+    width: 105px;
+    font-size: 14px;
+  }
+
+  #rgba-holder {
+    top: -150px;
+    left: 15px;
+  }
+
+  #hex-holder {
+    top: 186px;
+    left: 427px;
+  }
+}
