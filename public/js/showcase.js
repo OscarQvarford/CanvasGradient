@@ -35,19 +35,26 @@ panelForm.addEventListener('submit', e => {
 });
 
 let w, h;
+const canvasCover = document.getElementById('canvas-cover');
 const sizing = () => {
-  w = window.innerWidth;
-  h = window.innerHeight;
+  w = document.body.clientWidth;
+  h = document.body.clientHeight;
 
   if (w < 1000) {
     canvas.width = w;
     canvas.classList.remove('canvas-border');
+    canvasCover.classList.remove('canvas-cover-border');
   } else {
     canvas.width = w - (w - 1000);
     canvas.classList.add('canvas-border');
+    canvasCover.classList.add('canvas-cover-border');
   }
 
   canvas.height = canvas.width / 2;
+
+  document.documentElement.style.setProperty('--canvas-width', `${canvas.width}px`);
+  document.documentElement.style.setProperty('--canvas-height', `${canvas.height}px`);
+
   draw(...showcaseVals());
 }
 sizing();

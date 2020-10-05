@@ -1,11 +1,20 @@
+:root {
+  --canvas-width: 1000px;
+  --canvas-height: 500px;
+}
+
 #canvas {
   background-color: #0f0f18;
 }
 
 #canvas-container {
-  height: 500px;
   margin: auto;
-  width: 1000px;
+
+  height: var(--canvas-height);
+  width: var(--canvas-width);
+
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 .canvas-border {
@@ -13,4 +22,22 @@
   border-bottom-right-radius: 15px;
   overflow: hidden;
   -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); /* this fixes the overflow:hidden in Chrome/Opera */
+}
+
+#canvas-cover {
+  position: relative;
+  top: calc(var(--canvas-height) * -1);
+  margin: auto;
+
+  width: var(--canvas-width);
+  height: var(--canvas-height);
+
+  -webkit-box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75);
+  box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75);
+}
+
+.canvas-cover-border {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
