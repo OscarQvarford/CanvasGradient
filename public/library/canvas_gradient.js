@@ -1,9 +1,5 @@
 /**
  * @author Oscar Qvarford <oscar.qvarford@gmail.com>
- * @copyright Oscar Qvarford 2020
- * @license
- * https://opensource.org/licenses/MIT
- * 
  * 
  * Returns values to use for creating a gradient in JavaScript Canvas
  * 
