@@ -4,6 +4,21 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const draw = (x, y, width, height, angle) => {
+
+  const scaleText = document.getElementById('canvas-scale')
+  if (width > canvas.width - 20 || height > canvas.height - 20) {
+    const differences = [canvas.width - 20 - width, canvas.height - 20 - height];
+    const changeFactor = (Math.min(...differences) === differences[0]) ? 
+      Math.floor((canvas.width - 20) / width * 10) / 10:
+      Math.floor((canvas.height - 20) / height * 10) / 10;
+    
+    width *= changeFactor;
+    height *= changeFactor;
+
+    const scale = 1 / changeFactor;
+    scaleText.innerHTML = `1:${Math.round(scale * 100) / 100}`;
+  } else scaleText.innerHTML = '1:1';
+
   x = canvas.width / 2 - width / 2;
   y = canvas.height / 2 - height / 2;
 

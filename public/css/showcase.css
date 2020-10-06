@@ -8,6 +8,7 @@
 }
 
 #canvas-container {
+  position: relative;
   margin: auto;
 
   height: var(--canvas-height);
@@ -40,4 +41,14 @@
 .canvas-cover-border {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+}
+
+#canvas-scale {
+  position: absolute;
+  margin: 0;
+  top: 3%;
+  left: 3%;
+
+  color: #818181;
+  font-size: 20px;
 }
