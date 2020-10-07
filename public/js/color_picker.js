@@ -1,3 +1,4 @@
+const initColorPicker = () => {
 let mouseIsPressed = false;
 
 const colorBox = document.getElementById('color-box');
@@ -507,3 +508,4 @@ window.addEventListener('input', e => {
     e.target.value = e.target.value.toUpperCase();
   }
 });
+}

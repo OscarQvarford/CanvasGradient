@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/color-picker.css">
 
   <script src="./js/main.js"></script>
+  <script src="./js/color_picker.js"></script>
 </head>
 <body>
 
@@ -39,11 +40,12 @@
 
   <section id="color-picker-section"></section>
   <script>
-    loadHtml('color-picker-section', './components/color-picker.html');
+    loadHtml('color-picker-section', './components/color-picker.html')
+      .then(() => initColorPicker())
+      .catch(err => console.error(err));
   </script>
 
   <script src="./library/canvas_gradient_min.js"></script>
-  <script src="./js/color_picker.js"></script>
   <script src="./js/showcase.js"></script>
 </body>
 </html>
