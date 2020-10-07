@@ -55,18 +55,21 @@ const sizing = () => {
   w = document.body.clientWidth;
   h = document.body.clientHeight;
 
-  if (w < 1000) {
+  if (w < 720) {
     canvas.width = w;
     canvas.classList.remove('canvas-border');
-    canvasCover.classList.remove('canvas-cover-border');
+    canvas.classList.remove('canvas-large');
+    canvasCover.classList.remove('canvas-large');
+    canvas.height = canvas.width / 2;
   } else {
-    canvas.width = w - (w - 1000);
+    canvas.width = w / 2 - 20;
     canvas.classList.add('canvas-border');
-    canvasCover.classList.add('canvas-cover-border');
+    canvas.classList.add('canvas-large');
+    canvasCover.classList.add('canvas-large');
+    canvas.height = canvas.width;
   }
 
-  canvas.height = canvas.width / 2;
-
+  document.documentElement.style.setProperty('--w', `${w}px`);
   document.documentElement.style.setProperty('--canvas-width', `${canvas.width}px`);
   document.documentElement.style.setProperty('--canvas-height', `${canvas.height}px`);
 
