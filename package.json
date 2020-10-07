@@ -11,5 +11,13 @@
   "dependencies": {
     "browserify": "^16.5.1"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OscarQvarford/CanvasGradient.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OscarQvarford/CanvasGradient/issues"
+  },
+  "homepage": "https://github.com/OscarQvarford/CanvasGradient#readme"
 }

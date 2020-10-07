@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/showcase.css">
   <link rel="stylesheet" href="css/color-picker.css">
+
+  <script src="./js/main.js"></script>
 </head>
 <body>
 
@@ -35,29 +37,10 @@
 
   </section>
 
-  <div id="color-picker" class="unselectable">
-
-    <div id="color-box">
-      <div id="doughnut"></div>
-    </div>
-    <div id="polychrome">
-      <div class="slider"></div>
-    </div>
-    <div id="transparency">
-      <div class="slider"></div>
-    </div>
-    <div id="color-output"></div>
-
-    <div id="rgba-holder">
-      <p id="rgba-label" class="picker-input-label">RGBA</p>
-      <input id="rgba" class="picker-input" type="text" placeholder="R, G, B, A" value="255, 0, 0, 1">
-    </div>
-    
-    <div id="hex-holder">
-      <p id="hex-label" class="picker-input-label">#HEX</p>
-      <input id="hex" class="picker-input" type="text" placeholder="#HEX" value="FF0000">
-    </div>
-  </div>
+  <section id="color-picker-section"></section>
+  <script>
+    loadHtml('color-picker-section', './components/color-picker.html');
+  </script>
 
   <script src="./library/canvas_gradient_min.js"></script>
   <script src="./js/color_picker.js"></script>
