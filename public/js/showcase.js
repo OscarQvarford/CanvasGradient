@@ -8,14 +8,13 @@ const draw = (x, y, width, height, angle) => {
   const scaleText = document.getElementById('canvas-scale')
   if (width > canvas.width - 20 || height > canvas.height - 20) {
     const differences = [canvas.width - 20 - width, canvas.height - 20 - height];
-    const changeFactor = (Math.min(...differences) === differences[0]) ? 
-      Math.floor((canvas.width - 20) / width * 10) / 10:
-      Math.floor((canvas.height - 20) / height * 10) / 10;
-    
-    width *= changeFactor;
-    height *= changeFactor;
+    const scale = (Math.min(...differences) === differences[0]) ? 
+      Math.ceil(width / (canvas.width - 20) * 2) / 2:
+      Math.ceil(height / (canvas.height - 20) * 2) / 2;
 
-    const scale = 1 / changeFactor;
+    width *= 1 / scale;
+    height *= 1 / scale;
+    
     scaleText.innerHTML = `1:${Math.round(scale * 100) / 100}`;
   } else scaleText.innerHTML = '1:1';
 
