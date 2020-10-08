@@ -13,7 +13,7 @@
 }
 
 #color-picker {
-  visibility: visible;
+  visibility: hidden;
   position: relative;
   display: inline-block;
   margin: 100px;

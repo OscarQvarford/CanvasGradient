@@ -53,7 +53,9 @@ panelForm.addEventListener('submit', e => {
 });
 
 let w, h;
+const showcaseShadow = document.getElementById('showcase-shadow');
 const canvasCover = document.getElementById('canvas-cover');
+const panel = document.getElementById('panel');
 const sizing = () => {
   w = document.body.clientWidth;
   h = window.innerHeight;
@@ -62,20 +64,25 @@ const sizing = () => {
     canvas.width = w;
     canvas.height = canvas.width / 2;
 
+    showcaseShadow.style.display = 'none';
     canvas.classList.remove('canvas-border');
     canvas.classList.remove('canvas-large');
     canvasCover.classList.remove('canvas-large');
+    panel.classList.add('panel-small');
   } else {
-    if (h - 60 > w / 2 - 20) {
-      canvas.width = canvas.height = w / 2 - 20;
+    if (h - 90 > w / 2 - 30) {
+      canvas.width = canvas.height = w / 2 - 30;
     } else {
-      canvas.width = w / 2 - 20;
-      canvas.height = h - 60;
+      canvas.width = w / 2 - 30;
+      canvas.height = h - 90;
     }
 
+    showcaseShadow.style.display = 'inline';
     canvas.classList.add('canvas-border');
     canvas.classList.add('canvas-large');
     canvasCover.classList.add('canvas-large');
+    console.log('added panel-large')
+    panel.classList.remove('panel-small');
   }
 
   document.documentElement.style.setProperty('--w', `${w}px`);
