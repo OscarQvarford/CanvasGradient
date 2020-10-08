@@ -3,6 +3,8 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+// Drawing shape on canvas
+
 const draw = (x, y, width, height, angle) => {
 
   const scaleText = document.getElementById('canvas-scale')
@@ -30,6 +32,8 @@ const draw = (x, y, width, height, angle) => {
   ctx.fillRect(x,y,width,height);
 }
 
+// Scaling and layout of the canvas element
+
 const panelForm = document.getElementById('panel-form');
 const widthInput = document.getElementById('width-input');
 const heightInput = document.getElementById('height-input');
@@ -52,20 +56,26 @@ let w, h;
 const canvasCover = document.getElementById('canvas-cover');
 const sizing = () => {
   w = document.body.clientWidth;
-  h = document.body.clientHeight;
+  h = window.innerHeight;
 
   if (w < 720) {
     canvas.width = w;
+    canvas.height = canvas.width / 2;
+
     canvas.classList.remove('canvas-border');
     canvas.classList.remove('canvas-large');
     canvasCover.classList.remove('canvas-large');
-    canvas.height = canvas.width / 2;
   } else {
-    canvas.width = w / 2 - 20;
+    if (h - 60 > w / 2 - 20) {
+      canvas.width = canvas.height = w / 2 - 20;
+    } else {
+      canvas.width = w / 2 - 20;
+      canvas.height = h - 60;
+    }
+
     canvas.classList.add('canvas-border');
     canvas.classList.add('canvas-large');
     canvasCover.classList.add('canvas-large');
-    canvas.height = canvas.width;
   }
 
   document.documentElement.style.setProperty('--w', `${w}px`);
