@@ -81,7 +81,6 @@ const sizing = () => {
     canvas.classList.add('canvas-border');
     canvas.classList.add('canvas-large');
     canvasCover.classList.add('canvas-large');
-    console.log('added panel-large')
     panel.classList.remove('panel-small');
   }
 
