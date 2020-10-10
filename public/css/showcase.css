@@ -92,3 +92,28 @@
 
   border-bottom-right-radius: 0 !important;
 }
+
+.panel-input {
+  margin: 20px 0 0 20px;
+  padding: 0 0 0 10px;
+
+  width: calc(var(--canvas-width) / 2 - 40px);
+  height: 40px;
+
+  background-color: #141420;
+  border: none;
+  border-bottom: 3px solid rgba(167, 48, 255, 0.2);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  outline: none;
+
+  color: #818181;
+  font-size: 22px;
+
+  transition-duration: 300ms;
+  transition-property: border-color;
+}
+
+.panel-input:focus {
+  border-color: rgba(167, 48, 255, 1);
+}
