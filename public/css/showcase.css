@@ -49,9 +49,9 @@
   width: var(--canvas-width);
   height: var(--canvas-height);
 
-  -webkit-box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75), 0px 0px 10px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75), 0px 0px 10px 0px rgba(0,0,0,0.75);
-  box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75), 0px 0px 10px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75);
+  box-shadow: inset 0px 0px 52px 1px rgba(0,0,0,0.75);
 }
 
 .canvas-large {
