@@ -94,10 +94,12 @@
 }
 
 .panel-input {
-  margin: 20px 0 0 20px;
+  position: relative;
+  top: 20px;
+  margin: 0;
   padding: 0 0 0 10px;
 
-  width: calc(var(--canvas-width) / 2 - 40px);
+  width: 100%;
   height: 40px;
 
   background-color: #141420;
@@ -116,4 +118,22 @@
 
 .panel-input:focus {
   border-color: rgba(167, 48, 255, 1);
+}
+
+.panel-input-container {
+  position: relative;
+  display: inline-block;
+  margin: 20px 0 0 20px;
+
+  width: calc(var(--canvas-width) / 2 - 40px);
+  height: 60px;
+}
+
+.panel-input-container > p {
+  position: absolute;
+  left: 6px;
+  margin: 0;
+
+  color: #8181817d;
+  font-size: 14px;
 }
