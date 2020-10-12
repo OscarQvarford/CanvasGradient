@@ -34,7 +34,6 @@ const draw = (x, y, width, height, angle) => {
 
 // Scaling and layout of the canvas element
 
-const panelForm = document.getElementById('panel-form');
 const widthInput = document.getElementById('width-input');
 const heightInput = document.getElementById('height-input');
 const angleInput = document.getElementById('angle-input');
@@ -47,9 +46,19 @@ const showcaseVals = () => [
   parseInt(angleInput.value)
 ];
 
-panelForm.addEventListener('submit', e => {
-  e.preventDefault();
-  draw(...showcaseVals());
+let hasFocus = null;
+window.addEventListener('focusin', e => {
+  if (e.target.classList.contains('panel-input')) {
+    hasFocus = e.target.id;
+  }
+});
+
+window.addEventListener('focusout', e => {
+  if (e.target.id === hasFocus) hasFocus = null;
+});
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'Enter' && hasFocus !== null) draw(...showcaseVals());
 });
 
 let w, h;
