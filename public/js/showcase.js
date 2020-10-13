@@ -32,6 +32,60 @@ const draw = (x, y, width, height, angle) => {
   ctx.fillRect(x,y,width,height);
 }
 
+// Color slider
+
+const slider = document.getElementById('slider');
+
+const colorStopValues = [];
+
+function ColorStop(pos) {
+
+  const values = {
+    pos,
+    color: null
+  }
+
+  let currentColorStopIndex;
+
+  if (colorStopValues.length === 0) {
+    colorStopValues.push(values);
+    currentColorStopIndex = 0;
+  } else {
+    for (let i = 0; i < colorStopValues.length; i++) {
+      if (pos < colorStopValues[i].pos) {
+        currentColorStopIndex = i;
+        break;
+      }
+    }
+    if (currentColorStopIndex !== undefined)
+      colorStopValues.splice(currentColorStopIndex, 0, values);
+    else {
+      colorStopValues.push(values);
+      currentColorStopIndex = colorStopValues.length - 1;
+    }
+  }
+
+  if (colorStopValues.length < 3)
+    this.color = [255,255,255,1];
+  else {
+    const predecessor = colorStopValues[currentColorStopIndex - 1];
+    const successor = colorStopValues[currentColorStopIndex + 1];
+    if (predecessor === undefined || successor === undefined)
+      this.color = predecessor.color || successor.color;
+    else
+      this.color = predecessor.color.map((val, index) => (successor.color[index] + val) / 2);
+  }
+
+  colorStopValues[currentColorStopIndex].color = this.color;
+
+  this.pos = pos;
+}
+
+slider.addEventListener('click', e => {
+  const newColorStop = new ColorStop(e.offsetX);
+  console.log(colorStopValues);
+});
+
 // Scaling and layout of the canvas element
 
 const widthInput = document.getElementById('width-input');
