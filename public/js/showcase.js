@@ -65,18 +65,33 @@ function ColorStop(pos) {
     }
   }
 
+  const currentColorStop = colorStopValues[currentColorStopIndex];
+
   if (colorStopValues.length < 3)
     this.color = [255,255,255,1];
   else {
     const predecessor = colorStopValues[currentColorStopIndex - 1];
     const successor = colorStopValues[currentColorStopIndex + 1];
     if (predecessor === undefined || successor === undefined)
-      this.color = predecessor.color || successor.color;
+      this.color = (predecessor === undefined) ? 
+        successor.color:
+        predecessor.color;
     else
-      this.color = predecessor.color.map((val, index) => (successor.color[index] + val) / 2);
+      this.color = predecessor.color.map((val, index) => {
+        const fullDifference = successor.pos - predecessor.pos;
+        const partDifference = currentColorStop.pos - predecessor.pos;
+        const posPercentage = partDifference / fullDifference;
+
+        const colorDifference = successor.color[index] - predecessor.color[index];
+        const finalColor = (index !== 3) ? 
+          Math.round(predecessor.color[index] + (colorDifference * posPercentage)):
+          parseFloat((predecessor.color[index] + (colorDifference * posPercentage)).toFixed(2));
+
+        return finalColor;
+      });
   }
 
-  colorStopValues[currentColorStopIndex].color = this.color;
+  currentColorStop.color = this.color;
 
   this.pos = pos;
 }
