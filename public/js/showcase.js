@@ -35,14 +35,15 @@ const draw = (x, y, width, height, angle) => {
 // Color slider
 
 const slider = document.getElementById('slider');
+const sliderStyle = window.getComputedStyle(slider);
 
 const colorStopValues = [];
 
-function ColorStop(pos) {
+function ColorStop(pos, color) {
 
   const values = {
     pos,
-    color: null
+    color
   }
 
   let currentColorStopIndex;
@@ -67,39 +68,54 @@ function ColorStop(pos) {
 
   const currentColorStop = colorStopValues[currentColorStopIndex];
 
-  if (colorStopValues.length < 3)
-    this.color = [255,255,255,1];
-  else {
-    const predecessor = colorStopValues[currentColorStopIndex - 1];
-    const successor = colorStopValues[currentColorStopIndex + 1];
-    if (predecessor === undefined || successor === undefined)
-      this.color = (predecessor === undefined) ? 
-        successor.color:
-        predecessor.color;
-    else
-      this.color = predecessor.color.map((val, index) => {
-        const fullDifference = successor.pos - predecessor.pos;
-        const partDifference = currentColorStop.pos - predecessor.pos;
-        const posPercentage = partDifference / fullDifference;
+  if (!color) {
+    if (colorStopValues.length < 3)
+      this.color = [255,255,255,1];
+    else {
+      const predecessor = colorStopValues[currentColorStopIndex - 1];
+      const successor = colorStopValues[currentColorStopIndex + 1];
+      if (predecessor === undefined || successor === undefined)
+        this.color = (predecessor === undefined) ? 
+          successor.color:
+          predecessor.color;
+      else
+        this.color = predecessor.color.map((val, index) => {
+          const fullDifference = successor.pos - predecessor.pos;
+          const partDifference = currentColorStop.pos - predecessor.pos;
+          const posPercentage = partDifference / fullDifference;
 
-        const colorDifference = successor.color[index] - predecessor.color[index];
-        const finalColor = (index !== 3) ? 
-          Math.round(predecessor.color[index] + (colorDifference * posPercentage)):
-          parseFloat((predecessor.color[index] + (colorDifference * posPercentage)).toFixed(2));
+          const colorDifference = successor.color[index] - predecessor.color[index];
+          const finalColor = (index !== 3) ? 
+            Math.round(predecessor.color[index] + (colorDifference * posPercentage)):
+            parseFloat((predecessor.color[index] + (colorDifference * posPercentage)).toFixed(2));
 
-        return finalColor;
-      });
+          return finalColor;
+        });
+    }
+  } else {
+    this.color = color;
   }
 
   currentColorStop.color = this.color;
+
+  const colorStopElem = document.createElement('div');
+  const sliderWidth = parseInt(sliderStyle.getPropertyValue('width'));
+  colorStopElem.classList.add('color-stop');
+  colorStopElem.style.backgroundColor = `rgba(${this.color})`;
+  colorStopElem.style.left = `calc(${pos / sliderWidth} * 100% - 10px)`;
+  slider.appendChild(colorStopElem);
 
   this.pos = pos;
 }
 
 slider.addEventListener('click', e => {
-  const newColorStop = new ColorStop(e.offsetX);
-  console.log(colorStopValues);
+  const newColorStop = new ColorStop(e.offsetX, null);  
 });
+
+const sliderWidth = parseInt(sliderStyle.getPropertyValue('width'));
+
+new ColorStop(0, [255,0,0,1]);
+new ColorStop(sliderWidth, [255,255,255,1]);
 
 // Scaling and layout of the canvas element
 

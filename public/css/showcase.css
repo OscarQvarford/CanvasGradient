@@ -139,6 +139,7 @@
 }
 
 #slider {
+  position: relative;
   margin: 40px auto auto auto;
 
   width: calc(100% - 40px);
@@ -146,4 +147,12 @@
 
   background-color: white;
   border-radius: 6px;
+}
+
+.color-stop {
+  position: absolute;
+
+  width: 20px;
+  height: 20px;
+  background-color: red;
 }
