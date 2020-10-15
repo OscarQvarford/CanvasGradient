@@ -98,12 +98,18 @@ function ColorStop(pos, color) {
 
   currentColorStop.color = this.color;
 
+  const colorStopElemeContainer = document.createElement('div');
   const colorStopElem = document.createElement('div');
+  const colorStopElemArrow = document.createElement('div');
   const sliderWidth = parseInt(sliderStyle.getPropertyValue('width'));
+  colorStopElemeContainer.classList.add('color-stop-container');
   colorStopElem.classList.add('color-stop');
+  colorStopElemArrow.classList.add('color-stop-arrow');
   colorStopElem.style.backgroundColor = `rgba(${this.color})`;
-  colorStopElem.style.left = `calc(${pos / sliderWidth} * 100% - 10px)`;
-  slider.appendChild(colorStopElem);
+  colorStopElem.style.left = colorStopElemArrow.style.left = `calc(${pos / sliderWidth} * 100% - 10px)`;
+  slider.appendChild(colorStopElemeContainer);
+  colorStopElemeContainer.appendChild(colorStopElem);
+  colorStopElemeContainer.appendChild(colorStopElemArrow);
 
   this.pos = pos;
 }

@@ -151,8 +151,26 @@
 
 .color-stop {
   position: absolute;
+  top: 34px;
 
   width: 20px;
   height: 20px;
-  background-color: red;
+
+  box-shadow: -webkit-box-shadow: inset 0px 0px 0px 2px #EEEEEE;
+  -moz-box-shadow: inset 0px 0px 0px 2px #EEEEEE;
+  box-shadow: inset 0px 0px 0px 2px #EEEEEE;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.color-stop-arrow {
+  position: absolute;
+  top: 17px;
+
+  width: 0;
+  height: 0;
+
+  border-right: 10px solid  transparent; 
+  border-left: 10px solid  transparent; 
+  border-bottom: 17px solid #EEEEEE;
 }
