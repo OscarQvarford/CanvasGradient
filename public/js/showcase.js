@@ -43,6 +43,7 @@ function ColorStop(pos, color) {
 
   const values = {
     pos,
+    posPercentage: pos / parseInt(sliderStyle.getPropertyValue('width')),
     color
   }
 
@@ -78,19 +79,20 @@ function ColorStop(pos, color) {
         this.color = (predecessor === undefined) ? 
           successor.color:
           predecessor.color;
-      else
-        this.color = predecessor.color.map((val, index) => {
-          const fullDifference = successor.pos - predecessor.pos;
-          const partDifference = currentColorStop.pos - predecessor.pos;
-          const posPercentage = partDifference / fullDifference;
+      else {
+        const fullDifference = successor.pos - predecessor.pos;
+        const partDifference = currentColorStop.pos - predecessor.pos;
+        const posPercentage = partDifference / fullDifference;
 
-          const colorDifference = successor.color[index] - predecessor.color[index];
+        this.color = predecessor.color.map((val, index) => {
+          const colorDifference = successor.color[index] - val;
           const finalColor = (index !== 3) ? 
-            Math.round(predecessor.color[index] + (colorDifference * posPercentage)):
-            parseFloat((predecessor.color[index] + (colorDifference * posPercentage)).toFixed(2));
+            Math.round(val + (colorDifference * posPercentage)):
+            parseFloat((val + (colorDifference * posPercentage)).toFixed(2));
 
           return finalColor;
         });
+      }
     }
   } else {
     this.color = color;
@@ -98,18 +100,26 @@ function ColorStop(pos, color) {
 
   currentColorStop.color = this.color;
 
-  const colorStopElemeContainer = document.createElement('div');
+  const colorStopElemContainer = document.createElement('div');
   const colorStopElem = document.createElement('div');
   const colorStopElemArrow = document.createElement('div');
   const sliderWidth = parseInt(sliderStyle.getPropertyValue('width'));
-  colorStopElemeContainer.classList.add('color-stop-container');
+  colorStopElemContainer.classList.add('color-stop-container');
   colorStopElem.classList.add('color-stop');
   colorStopElemArrow.classList.add('color-stop-arrow');
   colorStopElem.style.backgroundColor = `rgba(${this.color})`;
   colorStopElem.style.left = colorStopElemArrow.style.left = `calc(${pos / sliderWidth} * 100% - 10px)`;
-  slider.appendChild(colorStopElemeContainer);
-  colorStopElemeContainer.appendChild(colorStopElem);
-  colorStopElemeContainer.appendChild(colorStopElemArrow);
+  slider.appendChild(colorStopElemContainer);
+  colorStopElemContainer.appendChild(colorStopElem);
+  colorStopElemContainer.appendChild(colorStopElemArrow);
+  
+  let backgroundString = '';
+  for (let i = 0; i < colorStopValues.length; i++) {
+    if (backgroundString !== '') backgroundString += ',';
+    backgroundString += `rgba(${colorStopValues[i].color}) ${colorStopValues[i].posPercentage * 100}%`;
+  }
+
+  slider.style.background = `linear-gradient(90deg, ${backgroundString})`;
 
   this.pos = pos;
 }
