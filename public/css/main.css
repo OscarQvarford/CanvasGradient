@@ -1,9 +1,10 @@
 body {
   margin: 0;
+  overflow: hidden;
 
   width: 100%;
 
-  background-color: #141522;
+  background-color: #FFFFFF;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -12,4 +13,11 @@ body {
   height: 60px;
 
   background-color: #FFFFFF;
+}
+
+#showcase {
+  margin: auto;
+  width: fit-content;
+  border-radius: 1rem;
+  box-shadow: 7px 7px 30px #e6e6e6, -7px -7px 30px #ffffff;
 }

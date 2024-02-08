@@ -1,3 +1,7 @@
+(function main() {
+	//initColorPicker();
+})();
+
 const loadHtml = (id, file) => {
 	return new Promise((resolve, reject) => {
 		fetch(`../${file}`)

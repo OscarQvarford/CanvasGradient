@@ -1,67 +1,61 @@
-/**
- * @author Oscar Qvarford <oscar.qvarford@gmail.com>
- * 
- * Returns values to use for creating a gradient in JavaScript Canvas
- * 
- * @example <caption>Linear Gradient Example</caption>
- * document.createElement('canvas').getContext('2d').createLinearGradient(...canvasGradient(0,0,50,50,45));
- * // Creates a 45 degree gradient for a square with the dimensions 50x50
- * @param  {Number} x      The x-offset of the gradient
- * @param  {Number} y      The y-offset of the gradient
- * @param  {Number} width  The width of the desired gradient
- * @param  {Number} height The height of the desired gradient
- * @param  {Number} angle  The angle of the gradient's slope
- * @return {Number[]}      The array containing the values that can be used to create a gradient
- */
-function canvasGradient(x, y, width, height, angle) {
-  // Calculations
+function gradient(w, h, deg) {
+  const caseAngle1 = Math.round((Math.atan(w / h) * 180) / Math.PI),
+    caseAngle2 = Math.round(180 - caseAngle1),
+    caseAngle3 = Math.round(180 + caseAngle1),
+    caseAngle4 = Math.round(360 - caseAngle1);
+        
+  let bx = tx = wh = w/2,
+    hh = h/2,
+    ty = h,    
+    by = 0,
+    angInRad = (deg * Math.PI) / 180,    
+    count1;
+      
+  if (deg == caseAngle1) {   tx = 0;bx = w;} else 
+    if (deg == caseAngle2) {   tx = 0;ty = 0;bx = w;by = h;} else
+      if (deg == caseAngle3) {   tx = w;ty = 0;bx = 0;by = h;} else
+        if (deg == caseAngle4) {   tx = w;ty = h;bx = 0;by = 0;} else
+      {
+        const mtan = Math.tan(angInRad);
 
-  function toRadians(deg) {
-    return deg * (Math.PI / 180);
-  }
+        if (0 < deg && deg < caseAngle1) {    
+          count1 = (mtan * h) / 2;
+          tx = wh - count1;    
+          bx = wh + count1;
+        } 
+        else if (caseAngle1 < deg && deg < caseAngle2) {    
+          count1 = wh / mtan;
+          tx = 0;
+          ty = hh + count1;
+          bx = w;
+          by = hh - count1;
+        } else if (caseAngle2 < deg && deg < caseAngle3) {    
+          count1 = (mtan * h) / 2;
+          tx = wh + count1;
+          ty = 0;
+          bx = wh - count1;
+          by = h;
+        } else if (caseAngle3 < deg && deg < caseAngle4) {    
+          count1 = wh / mtan;
+          tx = w;
+          ty = hh - count1;
+          bx = 0;
+          by = hh + count1;
+        } else if (caseAngle4 < deg && deg < 361) {
+          count1 = (mtan * h) / 2;
+          tx = wh - count1;
+          ty = h;
+          bx = wh + count1;
+          by = 0;
+        }
+      }
+  return [Math.round(tx), Math.round(ty), Math.round(bx), Math.round(by)];
+}
 
-  // Calculating the two points that will be used to determine the gradient
-  function calcPoints(width, height, angle) {
+function createLinearGradientValues(width, height, angle) {
+  angle = angle * Math.PI / 180;
+  const x = width * Math.cos(angle);
+  const y = height * Math.sin(angle);
 
-    angle = (Math.floor(angle / 45) % 2 === 0) ?
-      angle % 90:
-      Math.abs(angle - (angle + 90 - angle % 90));
-
-    const opposite1 = Math.tan(toRadians(angle)) * height;
-
-    const hypotenuse2 = width - opposite1;
-    const opposite2 = Math.sin(toRadians(angle)) * hypotenuse2;
-
-    const hypotenuse3 = opposite2;
-    const opposite3 = Math.sin(toRadians(angle)) * hypotenuse3;
-    const adjacent3 = Math.cos(toRadians(90 - angle)) * hypotenuse3;
-
-    posY = height + adjacent3;
-    posX = opposite1 + opposite3;
-
-    return {
-      x: posX,
-      y: posY
-    };
-  }
-
-  // Positioning the points
-
-  const pos = calcPoints(width, height, angle);
-  const vals = new Array(4).fill(0);
-  const angleSection = Math.floor(angle / 45);
-  if (angleSection % 2 === 0) {
-    vals[angleSection / 2] = pos.x;
-    vals[(3 + angleSection / 2) % 4] = pos.y;
-  } else {
-    vals[(angleSection - 1) / 2] = pos.y;
-    vals[(3 + (angleSection - 1) / 2) % 4] = pos.x;
-  }
-
-  vals[0] += x;
-  vals[2] += x;
-  vals[1] += y;
-  vals[3] += y;
-
-  return vals;
+  return { x, y }
 }

@@ -13,18 +13,39 @@
 }
 
 #color-picker {
-  visibility: hidden;
-  position: relative;
-  display: inline-block;
-  margin: 100px;
-  width: auto;
-  height: 370px;
-  padding: 40px 60px 35px 40px;
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 1rem;
 
-  background-color: #eeeeee;
-  border-radius: 50px;
-  box-shadow:  40px 40px 80px #d9d9d9, 
-              -40px -40px 80px #ffffff;
+  width: 100%;
+  height: 100%;
+  max-height: 368px;
+  /*padding: 40px 60px 35px 40px;*/
+
+  background-color: #ffffff;
+}
+
+#picker-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5rem;
+
+  font-size: 1.6rem;
+  color: #505050;
+
+  cursor: pointer;
+
+  transition-property: transform;
+  transition-duration: 150ms;
+}
+
+#picker-close:hover {
+  transform: scale(1.1);
 }
 
 #polychrome, #transparency {
@@ -32,15 +53,17 @@
   display: inline-block;
   margin-left: 20px;
 
-  width: 46px;
-  height: 368px;
+  width: 368px;
+  height: 46px;
 
   border-radius: 5px;
   box-shadow: 0 0 0 5px #ffffff;
+
+  cursor: grab;
 }
 
 #polychrome {
-  background: linear-gradient(180deg, 
+  background: linear-gradient(90deg, 
             rgba(255,0,0,1) 0%, 
             rgba(255,255,0,1) 17%,
             rgba(0,255,0,1) 33%, 
@@ -62,8 +85,8 @@
   display: inline-block;
   position: relative;
 
-  height: 368px;
-  width: 368px;
+  height: 100%;
+  width: 50%;
 
   background: linear-gradient(180deg, #FFFFFF, #000000);
   border-radius: 5px;
@@ -74,8 +97,8 @@
   content: "";
   position: absolute;
 
-  width: inherit;
-  height: inherit;
+  width: 100%;
+  height: 100%;
 
   background: linear-gradient(to bottom, var(--base-color), black);
   -webkit-mask-image: linear-gradient(to left, white, transparent);
@@ -105,8 +128,8 @@
 .slider {
   top: -6px;
 
-  width: 54px;
-  height: 4px;
+  width: 4px;
+  height: 54px;
 }
 
 #color-output {
@@ -140,16 +163,18 @@
 
 .picker-input-label {
   margin: 0;
+  padding: 0 2px;
 
+  background-color: #ffffff;
+  border-radius: 6px;
   font-size: 14px;
   color: #555555;
 }
 
 #rgba-holder {
-  position: relative;
-  display: inline-block;
-  top: -220px;
-  left: 20px;
+  position: absolute;
+  top: 120px;
+  left: calc(50% + 160px);
 
   height: 100px;
 }
@@ -167,10 +192,9 @@
 
 #hex-holder {
   position: absolute;
-  display: inline-block;
-  top: 240px;
-  left: 572px;
-
+  top: 185px;
+  left: calc(50% + 160px);
+  
   height: 100px;
 }
 
@@ -185,7 +209,7 @@
   top: 20px;
 }
 
-@media only screen and (max-height: 620px) {
+/*@media only screen and (max-height: 620px) {
   #color-picker {
     height: 260px;
     padding-right: 46px;
@@ -224,4 +248,4 @@
     top: 186px;
     left: 427px;
   }
-}
+}*/
