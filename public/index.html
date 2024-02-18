@@ -3,82 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JavaScript Gradient Generator</title>
+  <meta name="description" content="Generator for JavaScript Canvas Linear Gradient">
+  <meta name="author" content="Oscar Qvarford">
+
+  <title>Gradient Generator for JS Canvas</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/showcase.css">
+  <link rel="stylesheet" href="css/angle.css">
   <link rel="stylesheet" href="css/code.css">
   <link rel="stylesheet" href="css/color-picker.css">
+  <link rel="stylesheet" href="css/sizing.css">
 
   <script src="https://kit.fontawesome.com/1f1626d425.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
-  <div id="nav"></div>
-
   <div id="showcase">
     <div id="canvas-container">
       <canvas id="canvas"></canvas>
     </div><div id="canvas-cover">
       <p id="canvas-scale">1:1</p>
     </div><div id="panel">
-      <div class="panel-input-container">
-        <p>Width</p>
-        <input id="width-input" class="panel-input" type="text" value="300">
-      </div><!--
-    --><div class="panel-input-container">
-        <p>Height</p>
-        <input id="height-input" class="panel-input" type="text" value="300">
-      </div><!--
-    --><div class="panel-input-container">
-        <p>Angle</p>
-        <input id="angle-input" class="panel-input" type="text" value="45">
-      </div>
-  
-      <div id="slider"></div>
-  
-      <div id="code-box">
-        <p id="code-text">
-          <span class="code-purple">const</span> gradient <span class="code-purple">=</span> <span class="code-green">context</span><span class="code-purple">.</span><span class="code-blue">createLinearGradient</span><span class="code-purple">(</span><span id="code-gradient"></span><span class="code-purple">)</span>;
-          <br>
-          <br>
-          <span id="code-stops"></span>
-          <br>
-          <span class="code-green">context</span><span class="code-purple">.</span>fillStyle <span class="code-purple">=</span> gradient;<br>
-          <span class="code-green">context</span><span class="code-purple">.</span><span class="code-blue">fillRect</span><span class="code-purple">(</span><span class="code-orange">0</span><span class="code-purple">,</span> <span class="code-orange">0</span><span class="code-purple">,</span> <span id="code-dimensions"></span><span class="code-purple">)</span>;
-        </p>
-      </div>
+      <div id="panel-content">
+        <div id="panel-input-wrapper">
+          <div class="panel-input-container">
+            <label for="width-input">Width</label>
+            <input name="width-input" id="width-input" class="panel-input" type="number" value="300">
+          </div><!--
+        --><div class="panel-input-container">
+            <label for="height-input">Height</label>
+            <input name="height-input" id="height-input" class="panel-input" type="number" value="300">
+          </div>
+        </div><!--
+        <div class="panel-input-container">
+          <p>Angle</p>
+          <input id="angle-input" class="panel-input" type="text" value="45">
+        </div>-->
 
-      <div id="color-picker" class="unselectable">
-        <i id="picker-close" class="fa-solid fa-xmark"></i>
-    
-        <div id="color-box">
-            <div id="doughnut"></div>
+        <div id="angle-slider">
+          <label for="angle-input" id="angle-label">Angle: <input name="angle-input" id="angle-input" type="number" value="45"></label>
+          <div id="angle-slider-dot"></div>
         </div>
-        <div id="polychrome">
+    
+        <div id="slider"></div>
+    
+        <div id="code-box">
+          <p id="code-text">
+            <span class="code-purple">const</span> gradient <span class="code-purple">=</span> <span class="code-green">context</span><span class="code-purple">.</span><span class="code-blue">createLinearGradient</span><span class="code-purple">(</span><span id="code-gradient"></span><span class="code-purple">)</span>;
+            <br>
+            <br>
+            <span id="code-stops"></span>
+            <br>
+            <span class="code-green">context</span><span class="code-purple">.</span>fillStyle <span class="code-purple">=</span> gradient;<br>
+            <span class="code-green">context</span><span class="code-purple">.</span><span class="code-blue">fillRect</span><span class="code-purple">(</span><span class="code-orange">0</span><span class="code-purple">,</span> <span class="code-orange">0</span><span class="code-purple">,</span> <span id="code-dimensions"></span><span class="code-purple">)</span>;
+          </p>
+          <i id="code-copy" class="fa-regular fa-copy"></i>
+          <div id="code-copy-box">Code copied!</div>
+        </div>
+
+        <div id="color-picker" class="unselectable">
+          <i id="picker-close" class="fa-solid fa-xmark"></i>
+      
+          <div id="color-box">
+              <div id="doughnut"></div>
+          </div>
+          
+          <div id="color-output"></div>
+      
+          <div id="rgba-holder">
+              <p id="rgba-label" class="picker-input-label">RGBA</p>
+              <input id="rgba" class="picker-input" type="text" placeholder="R, G, B, A" value="255, 0, 0, 1">
+          </div>
+      
+          <div id="hex-holder">
+              <p id="hex-label" class="picker-input-label">#HEX</p>
+              <input id="hex" class="picker-input" type="text" placeholder="#HEX" value="FF0000">
+          </div>
+          <div id="polychrome">
             <div class="slider"></div>
-        </div>
-        <div id="transparency">
-            <div class="slider"></div>
-        </div>
-        <div id="color-output"></div>
-    
-        <div id="rgba-holder">
-            <p id="rgba-label" class="picker-input-label">RGBA</p>
-            <input id="rgba" class="picker-input" type="text" placeholder="R, G, B, A" value="255, 0, 0, 1">
-        </div>
-    
-        <div id="hex-holder">
-            <p id="hex-label" class="picker-input-label">#HEX</p>
-            <input id="hex" class="picker-input" type="text" placeholder="#HEX" value="FF0000">
+          </div>
+          <div id="transparency">
+              <div class="slider"></div>
+          </div>
         </div>
       </div>
-  
     </div>
   </div>
-
-  
 
   <script src="./library/canvas_gradient.js"></script>
   <script src="./js/color_picker.js"></script>

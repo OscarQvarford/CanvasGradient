@@ -40,11 +40,11 @@ class ColorPicker {
     this.setSliders(context.color);    
   }
 
-  setBaseColor(y) {
+  setBaseColor(x) {
     const style = window.getComputedStyle(polychrome);
-    const height = parseInt(style.getPropertyValue('height'));
+    const width = parseInt(style.getPropertyValue('width'));
 
-    const colorPos = (Math.round(y / (height / 256)) / 256 * 1536);
+    const colorPos = (Math.round(x / (width / 256)) / 256 * 1536);
     const colorZone = colorPos / 256;
 
     if (colorZone <= 1) {
@@ -172,13 +172,13 @@ class ColorPicker {
 
     if (colorInput.length === 4) {
       const style = window.getComputedStyle(this.transparency);
-      const height = parseInt(style.getPropertyValue('height'));
+      const height = parseInt(style.getPropertyValue('width'));
 
       this.transparencyLevel = colorInput[3];
       colorInput.pop();
       this.transparencySlider.style.left = `${(height - (height * this.transparencyLevel)) - 6}px`
     } else {
-      this.transparencySlider.style.top = '-6px';
+      this.transparencySlider.style.left = '-6px';
       this.transparencyLevel = 1;
     }
 
@@ -198,7 +198,7 @@ class ColorPicker {
     const largestValue = Math.max(...colorInput);
     const smallestValue = Math.min(...colorInput);
     const style = window.getComputedStyle(polychrome);
-    const height = parseInt(style.getPropertyValue('height'));
+    const height = parseInt(style.getPropertyValue('width'));
     const baseColorPos = [0, height / 3, height / 1.5, height];
 
     if (largestValue === occursMultipleTimes && 
@@ -206,23 +206,23 @@ class ColorPicker {
       if (indices.includes(0) && indices.includes(2)) {
         const pos = (baseColorPos[2] + baseColorPos[3]) / 2;
         this.setBaseColor(pos);
-        this.polychromeSlider.style.top = `${pos - 6}px`;
+        this.polychromeSlider.style.left = `${pos - 6}px`;
         this.setColor(colorInput);
       } else {
         const pos = (baseColorPos[indices[0]] + baseColorPos[indices[1]]) / 2;
         this.setBaseColor(pos);
-        this.polychromeSlider.style.top = `${pos - 6}px`;
+        this.polychromeSlider.style.left = `${pos - 6}px`;
         this.setColor(colorInput);
       }
 
     } else if (indices.length === 2) {
       const pos = baseColorPos[colorInput.indexOf(largestValue)]
       this.setBaseColor(pos);
-      this.polychromeSlider.style.top = `${pos - 6}px`;
+      this.polychromeSlider.style.left = `${pos - 6}px`;
       this.setColor(colorInput);
     } else if (indices.length === 3) {
       this.setBaseColor(0);
-      this.polychromeSlider.style.top = '-6px';
+      this.polychromeSlider.style.left = '-6px';
       this.setColor(colorInput);
     } else {
       let middleValue;
@@ -254,7 +254,7 @@ class ColorPicker {
         }
 
         this.setBaseColor(pos);
-        this.polychromeSlider.style.top = `${pos - 6}px`;
+        this.polychromeSlider.style.left = `${pos - 6}px`;
         this.setColor(colorInput);
 
       } else {
@@ -263,7 +263,7 @@ class ColorPicker {
                     (height / 6)));
 
         this.setBaseColor(pos);
-        this.polychromeSlider.style.top = `${pos - 6}px`;
+        this.polychromeSlider.style.left = `${pos - 6}px`;
         this.setColor(colorInput);
       }
     }
@@ -275,33 +275,33 @@ class ColorPicker {
         this.polySliderIsOut = false;
         this.polySliderIsPressed = true;
     
-        const y = e.offsetY;
-        this.polychromeSlider.style.top = `${y - 6}px`;
+        const x = e.offsetX;
+        this.polychromeSlider.style.left = `${x - 6}px`;
     
-        this.setBaseColor(e.offsetY);
+        this.setBaseColor(e.offsetX);
         this.setColor();
       } else if (this.polySliderIsPressed) {
         this.polySliderIsOut = true;
     
         const style = window.getComputedStyle(this.polychrome);
-        const height = parseInt(style.getPropertyValue('height'));
+        const width = parseInt(style.getPropertyValue('width'));
         const pos = this.polychrome.getBoundingClientRect();
-        const y = e.clientY;
+        const x = e.clientX;
     
-        let offsetYPos;
+        let offsetXPos;
     
-        if (y < pos.top) {
-          this.polychromeSlider.style.top = '-6px';
-          offsetYPos = 0;
-        } else if (y > pos.top + height) {
-          this.polychromeSlider.style.top = `${height - 6}px`
-          offsetYPos = height - 1;
+        if (x < pos.left) {
+          this.polychromeSlider.style.left = '-6px';
+          offsetXPos = 0;
+        } else if (x > pos.left + width) {
+          this.polychromeSlider.style.left = `${width - 6}px`
+          offsetXPos = width - 1;
         } else {
-          this.polychromeSlider.style.top = `${(y - pos.top) - 6}px`;
-          offsetYPos = y - pos.top;
+          this.polychromeSlider.style.left = `${(x - pos.left) - 6}px`;
+          offsetXPos = x - pos.left;
         }
     
-        this.setBaseColor(offsetYPos);
+        this.setBaseColor(offsetXPos);
         this.setColor();
     
       } else if (e.target.id === 'transparency' && this.mouseIsPressed && !this.cursorIsOut) {
@@ -309,31 +309,31 @@ class ColorPicker {
         this.transparencySliderIsPressed = true;
     
         const style = window.getComputedStyle(e.target);
-        const height = parseInt(style.getPropertyValue('height'));
+        const width = parseInt(style.getPropertyValue('width'));
         
-        const y = e.offsetY;
-        this.transparencyLevel = ((height - y) / height).toFixed(2);
+        const x = e.offsetX;
+        this.transparencyLevel = ((width - x) / width).toFixed(2);
     
         this.setColor();
     
-        this.transparencySlider.style.top = `${y - 6}px`;
+        this.transparencySlider.style.left = `${x - 6}px`;
       } else if (this.transparencySliderIsPressed) {
         this.transparencySliderIsOut = true;
     
         const style = window.getComputedStyle(this.transparency);
-        const height = parseInt(style.getPropertyValue('height'));
+        const width = parseInt(style.getPropertyValue('width'));
         const pos = this.transparency.getBoundingClientRect();
-        const y = e.clientY;
+        const x = e.clientX;
     
-        if (y < pos.top) {
+        if (x < pos.left) {
           this.transparencyLevel = 1;
-          this.transparencySlider.style.top = '-6px';
-        } else if (y > pos.top + height) {
+          this.transparencySlider.style.left = '-6px';
+        } else if (x > pos.left + width) {
           this.transparencyLevel = 0;
-          this.transparencySlider.style.top = `${height - 6}px`;
+          this.transparencySlider.style.left = `${width - 6}px`;
         } else {
-          this.transparencyLevel = (((height - (y - pos.top)) / height)).toFixed(2);
-          this.transparencySlider.style.top = `${y - pos.top - 6}px`;
+          this.transparencyLevel = (((width - (x - pos.left)) / width)).toFixed(2);
+          this.transparencySlider.style.left = `${x - pos.left - 6}px`;
         }
     
         this.setColor();
@@ -495,21 +495,21 @@ class ColorPicker {
     
     window.addEventListener('click', e => {
       if (e.target.id === 'polychrome') {
-        const y = e.offsetY;
-        this.polychromeSlider.style.top = `${y - 6}px`;
+        const x = e.offsetX;
+        this.polychromeSlider.style.left = `${x - 6}px`;
     
-        this.setBaseColor(e.offsetY);
+        this.setBaseColor(e.offsetX);
         this.setColor();
       } else if (e.target.id === 'transparency') {
         const style = window.getComputedStyle(e.target);
-        const height = parseInt(style.getPropertyValue('height'));
+        const width = parseInt(style.getPropertyValue('width'));
         
-        const y = e.offsetY;
-        this.transparencyLevel = ((height - y) / height).toFixed(2);
+        const x = e.offsetX;
+        this.transparencyLevel = ((width - x) / width).toFixed(2);
     
         this.setColor();
     
-        this.transparencySlider.style.top = `${y - 6}px`;
+        this.transparencySlider.style.left = `${x - 6}px`;
       } else if (e.target.id === 'color-box') {
         const style = window.getComputedStyle(e.target);
         const width = parseInt(style.getPropertyValue('width'));

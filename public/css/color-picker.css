@@ -2,6 +2,8 @@
   --base-color: rgba(255, 0, 0, 1);
   --picker-color: rgba(255, 0, 0, 1);
   --picker-color-opaque: rgb(255, 0, 0);
+  --input-color: rgba(100, 255, 200, 0.2);
+  --input-color-full: rgba(100, 255, 200, 1);
 }
 
 .unselectable {
@@ -15,15 +17,13 @@
 #color-picker {
   display: none;
   position: absolute;
-  top: 0;
+  top: calc(50% - 250px);
   right: 0;
-  bottom: 0;
   left: 0;
-  margin: 1rem;
+  margin: auto;
 
-  width: 100%;
-  height: 100%;
-  max-height: 368px;
+  width: min-content;
+  height: fit-content;
   /*padding: 40px 60px 35px 40px;*/
 
   background-color: #ffffff;
@@ -31,11 +31,11 @@
 
 #picker-close {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -0.5rem;
+  right: -2.5rem;
   padding: 0.5rem;
 
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #505050;
 
   cursor: pointer;
@@ -51,10 +51,10 @@
 #polychrome, #transparency {
   position: relative;
   display: inline-block;
-  margin-left: 20px;
+  margin-top: 20px;
 
-  width: 368px;
-  height: 46px;
+  width: 440px;
+  height: 3rem;
 
   border-radius: 5px;
   box-shadow: 0 0 0 5px #ffffff;
@@ -74,10 +74,10 @@
 }
 
 #transparency {
-  background: linear-gradient(180deg,
+  background: linear-gradient(90deg,
               var(--picker-color-opaque),
             rgba(255,255,255,0)),
-              url("../images/checkered-background.png");
+              url("../images/checkered.png");
   background-size: contain;
 }
 
@@ -85,9 +85,9 @@
   display: inline-block;
   position: relative;
 
-  height: 100%;
-  width: 50%;
-
+  width: 270px;
+  height: 270px;
+  
   background: linear-gradient(180deg, #FFFFFF, #000000);
   border-radius: 5px;
   box-shadow: 0 0 0 5px #ffffff;
@@ -141,9 +141,9 @@
   height: 100px;
 
   background: linear-gradient(0deg, var(--picker-color), var(--picker-color)),
-              url('../images/checkered-background.png');
+              url('../images/checkered.png');
   border-radius: 10px;
-  box-shadow: 0 0 0 5px #ffffff;
+  box-shadow: inset 0px 0px 0px 3px rgba(240,240,240,1);
 }
 
 .picker-input {
@@ -174,7 +174,7 @@
 #rgba-holder {
   position: absolute;
   top: 120px;
-  left: calc(50% + 160px);
+  left: 290px;
 
   height: 100px;
 }
@@ -193,7 +193,7 @@
 #hex-holder {
   position: absolute;
   top: 185px;
-  left: calc(50% + 160px);
+  left: 290px;
   
   height: 100px;
 }

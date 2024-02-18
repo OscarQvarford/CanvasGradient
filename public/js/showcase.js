@@ -41,12 +41,15 @@ const draw = () => {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const gradientVals = gradient(width, height, angle);
-  const grd = ctx.createLinearGradient(...gradientVals);
+  const showcaseGradientVals = gradient(width, height, angle).map((p, i) => (i % 2 === 0) ? p + x : p + y);
+  const grd = ctx.createLinearGradient(...showcaseGradientVals);
 
   let stopText = '';
 
+  stops.sort((a, b) => a.posPercentage - b.posPercentage);
+
   for (const stop of stops) {
-    grd.addColorStop(stop.posPercentage, `rgba(${stop.color.toString()})`);
+    grd.addColorStop(Math.min(Math.max(stop.posPercentage, 0), 1), `rgba(${stop.color.toString()})`);
     stopText += `<span class="code-green">gradient</span><span class="code-purple">.</span><span class="code-blue">addColorStop</span><span class="code-purple">(</span><span class="code-orange">${Math.round((stop.posPercentage + Number.EPSILON) * 100) / 100}</span><span class="code-purple">,</span> <span class="code-beige">'rgba(${stop.color.toString().split(',').join(', ')})'</span><span class="code-purple">)</span>;<br>`;
   }
 
@@ -80,8 +83,14 @@ class ColorStop {
   }
 
   createStop() {
+    if (this.color) {
+      document.querySelector(':root').style.setProperty('--input-color', `rgba(${this.color.slice(0,3)},0.2)`);
+      document.querySelector(':root').style.setProperty('--input-color-full', `rgba(${this.color.slice(0,3)},1)`);
+    }
+
     let currentColorStopIndex;
     this.timestamp = Date.now();
+    this.pos = this.posPercentage * parseInt(sliderStyle.getPropertyValue('width'));
 
     const values = {
       pos: this.pos,
@@ -144,29 +153,66 @@ class ColorStop {
     const colorStopElemContainer = document.createElement('div');
     const colorStopElem = document.createElement('div');
     const colorStopElemArrow = document.createElement('div');
+    const colorStopElemClose = document.createElement('div');
+    const colorStopElemCloseIcon = document.createElement('i');
     const sliderWidth = parseInt(sliderStyle.getPropertyValue('width'));
 
     colorStopElemContainer.classList.add('color-stop-container');
     colorStopElem.classList.add('color-stop');
     colorStopElemArrow.classList.add('color-stop-arrow');
+    colorStopElemClose.classList.add('color-stop-close');
+    colorStopElemCloseIcon.className = 'fa-solid fa-xmark';
+
+    colorStopElemCloseIcon.addEventListener('click', () => {
+      this.removeStop();
+
+      for (let i = 0; i < stops.length; i++) {
+        if (stops[i].timestamp === this.timestamp) {
+          stops.splice(i, 1);
+          break;
+        }
+      }
+
+      this.drawSlider();
+    });
+
+    colorStopElemClose.appendChild(colorStopElemCloseIcon);
+
     colorStopElem.style.backgroundColor = `rgba(${this.color})`;
     colorStopElem.style.left = colorStopElemArrow.style.left = `calc(${this.pos / sliderWidth} * 100% - 10px)`;
-  
+    colorStopElemClose.style.left = `calc(${this.pos / sliderWidth} * 100% - 7px)`
+
     colorStopElemContainer.appendChild(colorStopElem);
     colorStopElemContainer.appendChild(colorStopElemArrow);
+    colorStopElemContainer.appendChild(colorStopElemClose);
     slider.appendChild(colorStopElemContainer);
 
     this.elContainer = colorStopElemContainer;
     if (this.callback) this.callback(this.elContainer);
 
-    let backgroundString = '';
-    for (let i = 0; i < colorStopValues.length; i++) {
-      if (backgroundString !== '') backgroundString += ',';
-      backgroundString += `rgba(${colorStopValues[i].color}) ${colorStopValues[i].posPercentage * 100}%`;
-    }
+    this.drawSlider();
+  }
 
-    slider.style.background = `linear-gradient(90deg, ${backgroundString})`;
-    draw();
+  drawSlider() {
+    
+    setTimeout(() => {
+      if (colorStopValues.length >= 2) {
+        let backgroundString = '';
+        colorStopValues.sort((a, b) => a.posPercentage - b.posPercentage);
+        for (let i = 0; i < colorStopValues.length; i++) {
+          if (backgroundString !== '') backgroundString += ',';
+          backgroundString += `rgba(${colorStopValues[i].color}) ${colorStopValues[i].posPercentage * 100}%`;
+        }
+  
+        slider.style.background = `linear-gradient(90deg, ${backgroundString})`;
+      } else if (colorStopValues.length === 1) {
+        slider.style.background = `rgba(${colorStopValues[0].color})`;
+      } else {
+        slider.style.background = 'rgba(255,255,255,1)';
+      }
+
+      draw();
+    }, 0)
   }
 
   removeStop() {
@@ -196,15 +242,36 @@ class ColorStop {
 
 const colorPicker = new ColorPicker();
 const colorPickerEl = document.getElementById('color-picker');
+const angleSlider = document.getElementById('angle-slider');
 document.getElementById('picker-close').addEventListener('click', () => {
   colorPickerEl.style.display = 'none';
+
+  for (const el of document.getElementsByClassName('panel-input-container')) {
+    el.style.visibility = 'visible';
+  }
+
+  document.getElementById('code-box').style.visibility = angleSlider.style.visibility = 'visible';
+
+  slider.classList.remove('slider-picker');
 });
 
 function sliderHandler(e, edge, color) {
   let colorStopElem;
 
-  const colorPickerHandler = () => {
+  const colorPickerHandler = stopEl => {
     colorPicker.set(colorStop);
+
+    if (edge) {
+      stopEl.classList.add('selected-stop');
+    }
+
+    for (const el of document.getElementsByClassName('panel-input-container')) {
+      el.style.visibility = 'hidden';
+    }
+
+    document.getElementById('code-box').style.visibility = angleSlider.style.visibility = 'hidden';
+
+    slider.classList.add('slider-picker');
 
     colorPickerEl.style.display = 'block';
   }
@@ -212,6 +279,9 @@ function sliderHandler(e, edge, color) {
   let sliderRect = slider.getBoundingClientRect();
 
   const colorStopMoveHandler = () => {
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'grabbing';
+
     const colorStopPositioner = e => {
       sliderRect = slider.getBoundingClientRect();
       let pos = e.clientX - sliderRect.x;
@@ -226,14 +296,38 @@ function sliderHandler(e, edge, color) {
     window.addEventListener('mousemove', colorStopPositioner);
 
     window.addEventListener('mouseup', () => {
+      document.body.style.userSelect = 'auto';
+      document.body.style.cursor = 'auto';
+
       window.removeEventListener('mousemove', colorStopPositioner);
       colorStopElem.addEventListener('mousedown', colorStopMoveHandler, { once: true })
     }, { once: true });
   }
 
+  let hasBeenSelected = false;
+  let edgeCount = 0;
+
   const setColorStopElem = el => {
+    for (const unselectedEl of document.getElementsByClassName('color-stop-container')) {
+      unselectedEl.classList.remove('selected-stop');
+    }
+
+    if (!edge) {
+      el.classList.add('selected-stop');
+    } else {
+      if (edgeCount >= 2) el.classList.add('selected-stop');
+      else edgeCount++;
+    }
+
+    if (!hasBeenSelected) {
+      hasBeenSelected = true;
+      colorPicker.set(colorStop);
+    }
+
     colorStopElem = el;
-    colorStopElem.addEventListener('click', colorPickerHandler);
+    colorStopElem.addEventListener('click', ev => {
+      if (ev.target.tagName !== 'I') colorPickerHandler(el);
+    });
     colorStopElem.addEventListener('mousedown', colorStopMoveHandler, { once: true });
   }
 
@@ -251,21 +345,6 @@ function sliderHandler(e, edge, color) {
   if (color) colorStop.color = color;
   colorStop.createStop();
 }
-/**
- * 
- *
-const gradient = context.createLinearGradient(0, 165, 30, 135);
-    
-gradient.addColorStop(0, 'rgba(255, 255, 0, 1)');
-gradient.addColorStop(0.8, 'rgba(0, 188, 212, 1)');
-gradient.addColorStop(1, 'rgba(238, 130, 238, 1)');
-        
-context.fillStyle = grad;
-context.fillRect(0, 0);
-
-/**
- * 
- */
 
 slider.addEventListener('click', e => {
   if (e.target.id !== 'slider') return;
@@ -275,10 +354,10 @@ slider.addEventListener('click', e => {
 
 const sliderWidth = parseInt(sliderStyle.getPropertyValue('width'));
 
-sliderHandler(null, 'start', [255,0,0,1]);
-setTimeout(() => {
+
   sliderHandler(null, 'end', [255,255,255,1]);
-}, 0)
+
+sliderHandler(null, 'start', [100,255,200,1]);
 
 /*const c1 = new ColorStop(0, [255,0,0,1]);
 c1.createStop();
@@ -291,7 +370,7 @@ stops.push(c2);*/
 // Scaling and layout of the canvas element
 
 window.addEventListener('keyup', e => {
-  if (e.target.classList.contains('panel-input')) {
+  if (e.target.classList.contains('panel-input') || e.target.id === 'angle-input') {
     let val;
 
     if (!isNaN(parseInt(e.target.value))) {
@@ -308,7 +387,7 @@ window.addEventListener('keyup', e => {
 
 let hasFocus = null;
 window.addEventListener('focusin', e => {
-  if (e.target.classList.contains('panel-input')) {
+  if (e.target.classList.contains('panel-input') || e.target.id === 'angle-input') {
     hasFocus = e.target.id;
   }
 });
@@ -321,41 +400,77 @@ window.addEventListener('keydown', e => {
   if (e.code === 'Enter' && hasFocus !== null) draw();
 });
 
+document.getElementById('code-copy').addEventListener('click', () => {
+  navigator.clipboard.writeText(codeText.innerText);
+  document.getElementById('code-copy-box').style.opacity = '1';
+
+  setTimeout(() => document.getElementById('code-copy-box').style.opacity = '0', 1500);
+});
+
+const dot = document.getElementById('angle-slider-dot');
+dot.addEventListener('mousedown', () => {
+  document.body.style.userSelect = 'none';
+  document.body.style.cursor = dot.style.cursor = 'grabbing';
+
+  const mouseHandler = e => {
+    const rect = angleSlider.getBoundingClientRect();
+    const factor = Math.max(Math.min(e.clientX - rect.x, rect.width), 0) / rect.width;
+    const x = factor * rect.width;
+    const angle = Math.round(factor * 360);
+
+    dot.style.left = `calc(${x - 2}px - 0.5rem)`;
+
+    angleInput.value = angle;
+    draw();
+  }
+
+  window.addEventListener('mousemove', mouseHandler);
+
+  window.addEventListener('mouseup', () => {
+    window.removeEventListener('mousemove', mouseHandler);
+    document.body.style.userSelect = 'auto';
+    document.body.style.cursor = 'auto';
+    dot.style.cursor = 'grab';
+  }, { once: true });
+});
+
 let w, h;
-const showcaseShadow = document.getElementById('showcase-shadow');
 const canvasCover = document.getElementById('canvas-cover');
 const panel = document.getElementById('panel');
+const panelHeight = document.getElementById('panel-content').getBoundingClientRect().height;
 const sizing = () => {
   w = document.body.clientWidth;
   h = window.innerHeight;
 
-  if (w < 720) {
-    canvas.width = w;
-    canvas.height = canvas.width / 2;
+  if ((w <= 840) || w > 1100) {
+    canvas.width = 520;
+    canvas.height = 520;
 
-    showcaseShadow.style.display = 'none';
-    canvas.classList.remove('canvas-border');
-    canvas.classList.remove('canvas-large');
-    canvasCover.classList.remove('canvas-large');
-    panel.classList.add('panel-small');
+    document.documentElement.style.setProperty('--canvas-height', `${525}px`);
+  } else if (w <= 1100) {
+    canvas.width = w / 3;
+    canvas.height = panelHeight;
+
+    document.documentElement.style.setProperty('--canvas-height', `${panelHeight}px`);
   } else {
     if (h - 90 > w / 2 - 30) {
       canvas.width = canvas.height = w / 2 - 30;
     } else {
       canvas.width = w / 2 - 30;
-      canvas.height = h - 90;
     }
 
-    //showcaseShadow.style.display = 'inline';
+    canvas.height = panelHeight;
+
     canvas.classList.add('canvas-border');
     canvas.classList.add('canvas-large');
     canvasCover.classList.add('canvas-large');
     panel.classList.remove('panel-small');
+
+    document.documentElement.style.setProperty('--canvas-height', `${panelHeight}px`);
   }
 
   document.documentElement.style.setProperty('--w', `${w}px`);
   document.documentElement.style.setProperty('--canvas-width', `${canvas.width}px`);
-  document.documentElement.style.setProperty('--canvas-height', `${canvas.height}px`);
 
   draw();
 }
@@ -364,3 +479,5 @@ sizing();
 window.addEventListener('resize', sizing);
 
 draw();
+
+addEventListener("DOMContentLoaded", () => { draw(), sizing() });

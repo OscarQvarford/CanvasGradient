@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  overflow: hidden;
 
   width: 100%;
 
@@ -8,16 +7,15 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-#nav {
-  width: var(--w);
-  height: 60px;
-
-  background-color: #FFFFFF;
-}
-
 #showcase {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   margin: auto;
   width: fit-content;
+  height: fit-content;
   border-radius: 1rem;
   box-shadow: 7px 7px 30px #e6e6e6, -7px -7px 30px #ffffff;
 }
